@@ -39,13 +39,37 @@
       }
       #result {
         word-wrap: break-word;
-        max-width: 300px; 
+        max-width: 300px;
         text-align: center;
         margin-bottom: 10px;
       }
       #copyButton {
         padding: 10px;
       }
+      /* Toast style */
+      .toast {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+        opacity: 0;
+        transition: opacity 0.5s, bottom 0.5s;
+      }
+      .toast.show {
+        visibility: visible;
+        opacity: 1;
+        bottom: 50px;
+      }
+      /* Toast style */
     </style>
   </head>
   <body>
@@ -53,9 +77,8 @@
       <h2>Unique CSS Identifier Generator</h2>
       <input type="text" id="cssName" placeholder="Enter CSS Name" />
       <button onclick="generateIdentifier()">Generate</button>
-    
 
-    <div class="result-container">
+      <div class="result-container">
         <div id="result-label">Unique CSS Identifier:</div>
         <div id="result"></div>
         <button id="copyButton" onclick="copyToClipboard()">
@@ -63,7 +86,7 @@
         </button>
       </div>
     </div>
-    </div>
+    <div id="toast" class="toast">Identifier copied to clipboard!</div>
 
     <script>
       function generateIdentifier() {
@@ -78,7 +101,7 @@
         //***Retrieve date and time (UTC)
         const now = new Date();
         const year = now.getUTCFullYear();
-        const month = now.getUTCFullYear() + 1; // +1 Because january start at 0
+        const month = now.getUTCMonth() + 1; // +1 Because january start at 0
         const day = now.getUTCDate();
         const hour = now.getUTCHours();
         const minute = now.getUTCMinutes();
@@ -110,13 +133,22 @@
         navigator.clipboard
           .writeText(resultText)
           .then(() => {
-            console.log("Copy"); //then async promise
+            showToast(); //then async promise
           })
           .catch((err) => {
             console.error("Failed to copy: ", err);
           });
       }
       //Copy uniqueIndentifier into clipboard***
+      //***Hide / Show Toast
+      function showToast() {
+        const toast = document.getElementById("toast");
+        toast.className = "toast show";
+        setTimeout(() => {
+          toast.className = "toast";
+        }, 3000);
+      }
+      //Hide / Show Toast***
     </script>
   </body>
 </html>
